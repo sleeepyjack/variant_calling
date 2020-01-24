@@ -1,0 +1,10 @@
+nextflow
+work/
+.*
+rootfs*
+*.simg
+*.sif
+*.log
+*.swp
+.vscode
+.DS_store
