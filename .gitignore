@@ -5,6 +5,14 @@ rootfs*
 *.simg
 *.sif
 *.log
+*.tmp
 *.swp
 .vscode
 .DS_store
+output/
+*.out
+*.bin
+*.bam
+*.bai
+*.fasta
+*.fai
