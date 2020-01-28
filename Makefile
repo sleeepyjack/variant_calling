@@ -1,9 +1,9 @@
-all: cpu.sif gpu.sif
+all: environment.cpu.sif environment.gpu.sif
 
-cpu.sif: Singularity.cpu
+environment.cpu.sif: Singularity.cpu
 	singularity build --fakeroot environment.cpu.sif Singularity.cpu
 
-gpu.sif: Singularity.gpu
+environment.gpu.sif: Singularity.gpu
 	singularity build --fakeroot environment.gpu.sif Singularity.gpu
 
 .PHONY: clean
