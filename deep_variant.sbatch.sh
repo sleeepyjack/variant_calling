@@ -26,7 +26,7 @@ MODEL=WGS
 
 # add some information to the log file
 echo "##################"
-echo "#### Deep Variant for MOGON"
+echo "#### Deep Variant on MOGON"
 echo "#### JOB ID:" ${SLURM_JOB_ID}
 echo "#### NODE:" $(hostname)
 echo "#### MODEL:" ${MODEL}
@@ -79,7 +79,7 @@ singularity exec \
 # make sure the output directory exists
 mkdir -p $OUTDIR
 
-# copy results to output directory
+# copy results to the output directory
 cp $LOCAL_VCFFILE $OUTDIR/ &
 cp $LOCAL_GVCFFILE $OUTDIR/ &
 wait
