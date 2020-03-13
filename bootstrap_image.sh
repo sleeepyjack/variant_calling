@@ -20,8 +20,8 @@ PATH_EXTENSION=/opt/bin:/opt/deepvariant/bin
 LD_LIBRARY_PATH_EXTENSION=''
 
 # specify number of logical cores to speed-up compilation
-NUM_CORES=4
-#NUM_CORES=$(grep -c ^processor /proc/cpuinfo)
+#NUM_CORES=8
+NUM_CORES=$(grep -c ^processor /proc/cpuinfo)
 
 # set locale
 echo "export LC_ALL=C" >> $SINGULARITY_ENVIRONMENT
@@ -35,6 +35,12 @@ apt-get -y upgrade
 #######################
 
 apt-get install -y vim htop wget
+
+####### INSTALL #######
+#GLNexus Optimizations#
+#######################
+
+apt-get install -y libjemalloc-dev numactl
 
 ####### INSTALL #######
 #        Java         #
@@ -191,6 +197,65 @@ rm -rf bamtools-$BAMTOOLS_VERSION
 
 PATH_EXTENSION=$PATH_EXTENSION:$BAMTOOLS_DIR/bin
 LD_LIBRARY_PATH_EXTENSION=$LD_LIBRARY_PATH_EXTENSION:$BAMTOOLS_DIR/lib
+
+####### INSTALL #######
+#      BCFTools       #
+#######################
+
+BCFTOOLS_VERSION=1.10.2
+BCFTOOLS_DIR=$INSTALL_DIR/bcftools
+
+cd $TEMP_DIR
+wget -c https://github.com/samtools/bcftools/releases/download/$BCFTOOLS_VERSION/bcftools-$BCFTOOLS_VERSION.tar.bz2
+tar -xvf bcftools-$BCFTOOLS_VERSION.tar.bz2
+cd bcftools-$BCFTOOLS_VERSION
+./configure --prefix $BCFTOOLS_DIR
+make -j $NUM_CORES
+make install
+cd ..
+rm -rf bcftools-$BCFTOOLS_VERSION
+
+PATH_EXTENSION=$PATH_EXTENSION:$BCFTOOLS_DIR/bin
+
+####### INSTALL #######
+#       HTSLib        #
+#######################
+
+HTSLIB_VERSION=1.10.2
+HTSLIB_DIR=$INSTALL_DIR/htslib
+
+cd $TEMP_DIR
+wget -c https://github.com/samtools/htslib/releases/download/$HTSLIB_VERSION/htslib-$HTSLIB_VERSION.tar.bz2
+tar -xvf htslib-$HTSLIB_VERSION.tar.bz2
+cd htslib-$HTSLIB_VERSION
+./configure --prefix $HTSLIB_DIR
+make -j $NUM_CORES
+make install
+cd ..
+rm -rf htslib-$HTSLIB_VERSION
+
+PATH_EXTENSION=$PATH_EXTENSION:$HTSLIB_DIR/bin
+
+####### INSTALL #######
+#      VCFTools       #
+#######################
+
+VCFTOOLS_VERSION=0.1.16
+VCFTOOLS_DIR=$INSTALL_DIR/vcftools
+
+cd $TEMP_DIR
+wget -c https://github.com/vcftools/vcftools/releases/download/v$VCFTOOLS_VERSION/vcftools-$VCFTOOLS_VERSION.tar.gz
+tar -xvzf vcftools-$VCFTOOLS_VERSION.tar.gz
+cd vcftools-$VCFTOOLS_VERSION
+./configure --prefix $VCFTOOLS_DIR
+make -j $NUM_CORES
+make install
+cd ..
+rm -rf vcftools-$VCFTOOLS_VERSION
+
+echo "export PERL5LIB=${VCFTOOLS_DIR}/share/perl/" >> $SINGULARITY_ENVIRONMENT
+
+PATH_EXTENSION=$PATH_EXTENSION:$VCFTOOLS_DIR/bin
 
 # TODO multiqc
 
