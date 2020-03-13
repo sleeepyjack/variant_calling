@@ -9,4 +9,4 @@ environment.gpu.sif: Singularity.gpu bootstrap_image.sh
 .PHONY: clean
 
 clean:
-	rm -rf *.sif
+	rm -rf environment.cpu.sif environment.gpu.sif
